@@ -308,8 +308,13 @@ def process_channel_line(line):
 def process_url(url):
     try:
         other_lines.append("◆◆◆　"+url)  # 存入other_lines便于check 2024-08-02 10:41
+        
+        # 创建一个请求对象并添加自定义header
+        req = urllib.request.Request(url)
+        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3')
+
         # 打开URL并读取内容
-        with urllib.request.urlopen(url) as response:
+        with urllib.request.urlopen(req) as response:
             # 以二进制方式读取数据
             data = response.read()
             # 将二进制数据解码为字符串
@@ -429,7 +434,6 @@ def correct_name_data(corrections, data):
     return corrected_data
 
 
-
 def sort_data(order, data):
     # 创建一个字典来存储每行数据的索引
     order_dict = {name: i for i, name in enumerate(order)}
@@ -489,14 +493,28 @@ for whitelist_line in whitelist_auto_lines:
             process_channel_line(",".join(whitelist_parts[1:]))
 
 
+version=datetime.now().strftime("%Y%m%d-%H-%M-%S")+",url"
+# 瘦身版
+all_lines_simple =  ["更新时间,#genre#"] +[version] + ['\n'] +\
+             ["💓专享源🅰️,#genre#"] + read_txt_to_array('主频道/♪专享源①.txt') + ['\n'] + \
+             ["💓专享源🅱️,#genre#"] + read_txt_to_array('主频道/♪专享源②.txt') + ['\n'] + \
+             ["💓专享央视,#genre#"] + read_txt_to_array('主频道/♪优质央视.txt') + ['\n'] + \
+             ["💓专享卫视,#genre#"] + read_txt_to_array('主频道/♪优质卫视.txt') + ['\n'] + \
+             ["💓港澳台,#genre#"] + read_txt_to_array('主频道/♪港澳台.txt') + ['\n'] + \
+             ["💓优质个源,#genre#"] + read_txt_to_array('主频道/♪优质源.txt') + ['\n'] + \
+             ["💓儿童专享,#genre#"] + read_txt_to_array('主频道/♪儿童专享.txt') + ['\n'] + \
+             ["💓咪咕直播,#genre#"] + read_txt_to_array('主频道/♪咪咕直播.txt') + ['\n'] + \
+             ["上海频道,#genre#"] + sort_data(sh_dictionary,set(correct_name_data(corrections_name,sh_lines))) + ['\n'] + \
+             ["体育频道,#genre#"] + sort_data(ty_dictionary,set(correct_name_data(corrections_name,ty_lines))) + ['\n']
+
 # 合并所有对象中的行文本（去重，排序后拼接）
 # ["奥运频道,#genre#"] + sort_data(Olympics_2024_Paris_dictionary,set(correct_name_data(corrections_name,Olympics_2024_Paris_lines))) + ['\n'] + \
-version=datetime.now().strftime("%Y%m%d-%H-%M-%S")+",url"
 all_lines =  ["更新时间,#genre#"] +[version] + ['\n'] +\
              ["💓专享源🅰️,#genre#"] + read_txt_to_array('主频道/♪专享源①.txt') + ['\n'] + \
              ["💓专享源🅱️,#genre#"] + read_txt_to_array('主频道/♪专享源②.txt') + ['\n'] + \
              ["💓专享央视,#genre#"] + read_txt_to_array('主频道/♪优质央视.txt') + ['\n'] + \
              ["💓专享卫视,#genre#"] + read_txt_to_array('主频道/♪优质卫视.txt') + ['\n'] + \
+             ["💓港澳台,#genre#"] + read_txt_to_array('主频道/♪港澳台.txt') + ['\n'] + \
              ["💓优质个源,#genre#"] + read_txt_to_array('主频道/♪优质源.txt') + ['\n'] + \
              ["💓儿童专享,#genre#"] + read_txt_to_array('主频道/♪儿童专享.txt') + ['\n'] + \
              ["💓咪咕直播,#genre#"] + read_txt_to_array('主频道/♪咪咕直播.txt') + ['\n'] + \
@@ -553,20 +571,42 @@ all_lines =  ["更新时间,#genre#"] +[version] + ['\n'] +\
              ["❤️与凤行,#genre#"] + read_txt_to_array('主频道/特供频道/♪与凤行.txt')  + ['\n'] + \
              ["❤️以家人之名,#genre#"] + read_txt_to_array('主频道/特供频道/♪以家人之名.txt')
 
+# # custom定制
+# custom_lines_zhang =  ["更新时间,#genre#"] +[version] + ['\n'] +\
+#             ["港澳台,#genre#"] + sort_data(gat_dictionary,set(correct_name_data(corrections_name,gat_lines))) + ['\n'] 
+
+
 
 # 将合并后的文本写入文件
 output_file = "merged_output.txt"
+output_file_simple = "merged_output_simple.txt"
 others_file = "others_output.txt"
+
+# # custom定制
+# output_file_custom_zhang = "custom/zhang.txt"
+
 try:
+    # 瘦身版
+    with open(output_file_simple, 'w', encoding='utf-8') as f:
+        for line in all_lines_simple:
+            f.write(line + '\n')
+    print(f"合并后的文本已保存到文件: {output_file_simple}")
+    # 全集版
     with open(output_file, 'w', encoding='utf-8') as f:
         for line in all_lines:
             f.write(line + '\n')
     print(f"合并后的文本已保存到文件: {output_file}")
-
+    # 其他
     with open(others_file, 'w', encoding='utf-8') as f:
         for line in other_lines:
             f.write(line + '\n')
     print(f"Others已保存到文件: {others_file}")
+
+    # 定制
+    # with open(output_file_custom_zhang, 'w', encoding='utf-8') as f:
+    #     for line in custom_lines_zhang:
+    #         f.write(line + '\n')
+    # print(f"合并后的文本已保存到文件: {output_file_custom_zhang}")
 
 except Exception as e:
     print(f"保存文件时发生错误：{e}")
@@ -584,33 +624,84 @@ def get_logo_by_channel_name(channel_name):
             return url
     return None
 
-#output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml,https://epg.112114.xyz/pp.xml.gz,https://assets.livednow.com/epg.xml"\n'
-output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n'
+# #output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml,https://epg.112114.xyz/pp.xml.gz,https://assets.livednow.com/epg.xml"\n'
+# output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n'
 
-with open(output_file, "r", encoding='utf-8') as file:
-    input_text = file.read()
+# with open(output_file, "r", encoding='utf-8') as file:
+#     input_text = file.read()
 
-lines = input_text.strip().split("\n")
-group_name = ""
-for line in lines:
-    parts = line.split(",")
-    if len(parts) == 2 and "#genre#" in line:
-        group_name = parts[0]
-    elif len(parts) == 2:
-        channel_name = parts[0]
-        channel_url = parts[1]
-        logo_url=get_logo_by_channel_name(channel_name)
-        if logo_url is None:  #not found logo
-            output_text += f"#EXTINF:-1 group-title=\"{group_name}\",{channel_name}\n"
-            output_text += f"{channel_url}\n"
-        else:
-            output_text += f"#EXTINF:-1  tvg-name=\"{channel_name}\" tvg-logo=\"{logo_url}\"  group-title=\"{group_name}\",{channel_name}\n"
-            output_text += f"{channel_url}\n"
+# lines = input_text.strip().split("\n")
+# group_name = ""
+# for line in lines:
+#     parts = line.split(",")
+#     if len(parts) == 2 and "#genre#" in line:
+#         group_name = parts[0]
+#     elif len(parts) == 2:
+#         channel_name = parts[0]
+#         channel_url = parts[1]
+#         logo_url=get_logo_by_channel_name(channel_name)
+#         if logo_url is None:  #not found logo
+#             output_text += f"#EXTINF:-1 group-title=\"{group_name}\",{channel_name}\n"
+#             output_text += f"{channel_url}\n"
+#         else:
+#             output_text += f"#EXTINF:-1  tvg-name=\"{channel_name}\" tvg-logo=\"{logo_url}\"  group-title=\"{group_name}\",{channel_name}\n"
+#             output_text += f"{channel_url}\n"
 
-with open("merged_output.m3u", "w", encoding='utf-8') as file:
-    file.write(output_text)
+# with open("merged_output.m3u", "w", encoding='utf-8') as file:
+#     file.write(output_text)
 
-print("merged_output.m3u文件已生成。")
+# print("merged_output.m3u文件已生成。")
+
+
+def make_m3u(txt_file, m3u_file):
+    try:
+        #output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml,https://epg.112114.xyz/pp.xml.gz,https://assets.livednow.com/epg.xml"\n'
+        output_text = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n'
+
+        # # 打开txt文件读取
+        # with open(txt_file, 'r', encoding='utf-8') as txt:
+        #     lines = txt.readlines()
+
+        # # 创建m3u文件并写入
+        # with open(m3u_file, 'w', encoding='utf-8') as m3u:
+        #     # 写入m3u文件的头部信息
+        #     m3u.write('#EXTM3U\n')
+
+        #     # 写入音频文件路径
+        #     for line in lines:
+        #         line = line.strip()
+        #         if line:  # 忽略空行
+        #             m3u.write(f'{line}\n')
+        with open(txt_file, "r", encoding='utf-8') as file:
+            input_text = file.read()
+
+        lines = input_text.strip().split("\n")
+        group_name = ""
+        for line in lines:
+            parts = line.split(",")
+            if len(parts) == 2 and "#genre#" in line:
+                group_name = parts[0]
+            elif len(parts) == 2:
+                channel_name = parts[0]
+                channel_url = parts[1]
+                logo_url=get_logo_by_channel_name(channel_name)
+                if logo_url is None:  #not found logo
+                    output_text += f"#EXTINF:-1 group-title=\"{group_name}\",{channel_name}\n"
+                    output_text += f"{channel_url}\n"
+                else:
+                    output_text += f"#EXTINF:-1  tvg-name=\"{channel_name}\" tvg-logo=\"{logo_url}\"  group-title=\"{group_name}\",{channel_name}\n"
+                    output_text += f"{channel_url}\n"
+
+        with open(f"{m3u_file}", "w", encoding='utf-8') as file:
+            file.write(output_text)
+
+        print(f"M3U文件 '{m3u_file}' 生成成功。")
+    except Exception as e:
+        print(f"发生错误: {e}")
+
+make_m3u(output_file, "merged_output.m3u")
+make_m3u(output_file_simple, "merged_output_simple.m3u")
+
 
 # 执行结束时间
 timeend = datetime.now()
