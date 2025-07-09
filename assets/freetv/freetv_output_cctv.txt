@@ -1,5 +1,5 @@
 更新时间,#genre#
-20250709 16:21:54,url
+20250709 16:33:23,url
 
 
 freetv_cctv,#genre#
@@ -89,6 +89,7 @@ CCTV6,https://stream1.freetv.fun/cctv6-65.ctv
 CCTV6,https://stream1.freetv.fun/cctv6-23.m3u8
 CCTV6,https://stream1.freetv.fun/cctv6-31.m3u8
 CCTV6,https://stream1.freetv.fun/cctv6-59.m3u8
+CCTV6,https://stream1.freetv.fun/cctv6-25.m3u8
 CCTV6,https://stream1.freetv.fun/cctv6-16.m3u8
 CCTV7,https://stream1.freetv.fun/cctv7-31.m3u8
 CCTV7,https://stream1.freetv.fun/cctv7-68.m3u8
@@ -196,7 +197,6 @@ CCTV12,https://stream1.freetv.fun/cctv12-79.m3u8
 CCTV12,https://stream1.freetv.fun/cctv12-51.m3u8
 CCTV12,https://stream1.freetv.fun/cctv12-19.ctv
 CCTV12,https://stream1.freetv.fun/cctv12-34.m3u8
-CCTV13,https://stream1.freetv.fun/cctv13-30.m3u8
 CCTV13,https://stream1.freetv.fun/cctv13-42.ctv
 CCTV13,https://stream1.freetv.fun/cctv13-60.ctv
 CCTV13,https://stream1.freetv.fun/cctv13-45.m3u8
@@ -250,9 +250,6 @@ CCTV17,https://stream1.freetv.fun/cctv17-28.m3u8
 CCTV17,https://stream1.freetv.fun/cctv17-52.ctv
 CCTV17,https://stream1.freetv.fun/cctv17-17.m3u8
 CCTV17,https://stream1.freetv.fun/cctv17-1.m3u8
-CCTV4欧洲,https://stream1.freetv.fun/cctv4ou-zhou-5.ctv
-CCTV4欧洲,https://stream1.freetv.fun/cctv4ou-zhou-6.ctv
-CCTV4美洲,https://stream1.freetv.fun/cctv4mei-zhou-3.ctv
 CCTV5+,https://stream1.freetv.fun/cctv5-plus-52.ctv
 CCTV5+,https://stream1.freetv.fun/cctv5-plus-47.m3u8
 CCTV5+,https://stream1.freetv.fun/cctv5-plus-39.m3u8
@@ -270,6 +267,9 @@ CCTV5+,https://stream1.freetv.fun/cctv5-plus-5.m3u8
 CCTV5+,https://stream1.freetv.fun/cctv5-plus-27.ctv
 CCTV5+,https://stream1.freetv.fun/cctv5-plus-7.m3u8
 CCTV5+,https://stream1.freetv.fun/cctv5-plus-48.m3u8
+CCTV4欧洲,https://stream1.freetv.fun/cctv4ou-zhou-5.ctv
+CCTV4欧洲,https://stream1.freetv.fun/cctv4ou-zhou-6.ctv
+CCTV4美洲,https://stream1.freetv.fun/cctv4mei-zhou-3.ctv
 CCTVNews,https://stream1.freetv.fun/cctv-news-1.m3u8
 CCTV风云足球,https://stream1.freetv.fun/cctvfeng-yun-zu-qiu-19.m3u8
 CCTV风云足球,https://stream1.freetv.fun/cctvfeng-yun-zu-qiu-28.ctv
