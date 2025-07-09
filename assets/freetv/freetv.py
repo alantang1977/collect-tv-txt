@@ -10,6 +10,187 @@ freetv_cctv_lines = []
 freetv_ws_lines = []
 freetv_other_lines = []
 
+# 从分类表构建频道分类字典
+CHANNEL_CATEGORIES = {
+    # 广东频道
+    '广州综合': '广东频道',
+    '广州新闻': '广东频道',
+    '广州影视频道': '广东频道',
+    '广州电视台影视频道': '广东频道',
+    '广州电视台法治频道': '广东频道',
+    '广州南国都市频道': '广东频道',
+    '4K南国都市频道': '广东频道',
+    '广州竞赛频道': '广东频道',
+    '广东珠江': '广东频道',
+    '广东新闻': '广东频道',
+    '广东卫视': '广东频道',
+    '广东民生': '广东频道',
+    '大湾区卫视': '广东频道',
+    '广东体育': '广东频道',
+    '江门综合': '广东频道',
+    '江门侨乡生活': '广东频道',
+    '佛山综合': '广东频道',
+    '深圳卫视': '广东频道',
+    '汕头综合': '广东频道',
+    '汕头经济': '广东频道',
+    '汕头文旅': '广东频道',
+    '茂名综合': '广东频道',
+    '茂名公共': '广东频道',
+    '4KUHD': '广东频道',
+    '纪实人文': '广东频道',
+    '纪实科教': '广东频道',
+    '金鹰纪实': '广东频道',
+
+    # 央视频道
+    'CCTV1': '央视频道',
+    'CCTV2': '央视频道',
+    'CCTV3': '央视频道',
+    'CCTV4': '央视频道',
+    'CCTV5': '央视频道',
+    'CCTV5+': '央视频道',
+    'CCTV6': '央视频道',
+    'CCTV7': '央视频道',
+    'CCTV8': '央视频道',
+    'CCTV9': '央视频道',
+    'CCTV10': '央视频道',
+    'CCTV11': '央视频道',
+    'CCTV12': '央视频道',
+    'CCTV13': '央视频道',
+    'CCTV14': '央视频道',
+    'CCTV15': '央视频道',
+    'CCTV16': '央视频道',
+    'CCTV17': '央视频道',
+    'CCTV4K': '央视频道',
+    'CCTV8K': '央视频道',
+
+    # 卫视频道
+    '山东卫视': '卫视频道',
+    '湖南卫视': '卫视频道',
+    '浙江卫视': '卫视频道',
+    '东方卫视': '卫视频道',
+    '北京卫视': '卫视频道',
+    '江苏卫视': '卫视频道',
+    '安徽卫视': '卫视频道',
+    '重庆卫视': '卫视频道',
+    '四川卫视': '卫视频道',
+    '东南卫视': '卫视频道',
+    '深圳卫视': '卫视频道',
+    '广东卫视': '卫视频道',
+    '广西卫视': '卫视频道',
+    '厦门卫视': '卫视频道',
+    '南方卫视': '卫视频道',
+    '甘肃卫视': '卫视频道',
+    '贵州卫视': '卫视频道',
+    '河北卫视': '卫视频道',
+    '河南卫视': '卫视频道',
+    '黑龙江卫视': '卫视频道',
+    '湖北卫视': '卫视频道',
+    '江西卫视': '卫视频道',
+    '吉林卫视': '卫视频道',
+    '内蒙古卫视': '卫视频道',
+    '辽宁卫视': '卫视频道',
+    '宁夏卫视': '卫视频道',
+    '青海卫视': '卫视频道',
+    '天津卫视': '卫视频道',
+    '海南卫视': '卫视频道',
+    '新疆卫视': '卫视频道',
+    '云南卫视': '卫视频道',
+    '西藏卫视': '卫视频道',
+    '海峡卫视': '卫视频道',
+    '兵团卫视': '卫视频道',
+    '黄河卫视': '卫视频道',
+    '安多卫视': '卫视频道',
+    '康巴卫视': '卫视频道',
+    '农林卫视': '卫视频道',
+    '三沙卫视': '卫视频道',
+    '延边卫视': '卫视频道',
+    '山东齐鲁卫视': '卫视频道',
+
+    # 港澳台
+    '翡翠台': '港澳台',
+    '凤凰中文': '港澳台',
+    '凤凰资讯': '港澳台',
+    '凤凰香港': '港澳台',
+    '凤凰卫视': '港澳台',
+    '香港卫视': '港澳台',
+    'TVBS欢乐': '港澳台',
+    'TVBS亚洲': '港澳台',
+    'TVBS新闻': '港澳台',
+    'J2': '港澳台',
+    'Viutv': '港澳台',
+    '明珠台': '港澳台',
+    '三立台湾': '港澳台',
+    '无线新闻': '港澳台',
+    '三立新闻': '港澳台',
+    '纬来体育': '港澳台',
+    '纬来育乐': '港澳台',
+    '东森综合': '港澳台',
+    '东森超视': '港澳台',
+    '东森电影': '港澳台',
+    'Now剧集': '港澳台',
+    'Now华剧': '港澳台',
+    '靖天资讯': '港澳台',
+    '星卫娱乐': '港澳台',
+    '卫视卡式': '港澳台',
+    '广东珠江': '港澳台',
+    '广东体育': '港澳台',
+    '广东民生': '港澳台',
+    '广东综艺': '港澳台',
+    '广东影视': '港澳台',
+    '经济科教': '港澳台',
+    '岭南戏曲': '港澳台',
+    '现代教育': '港澳台',
+    '大湾区卫视': '港澳台',
+
+    # 少儿频道
+    '东森幼幼': '少儿频道',
+    'iFun动漫': '少儿频道',
+    'momo亲子': '少儿频道',
+    '黑莓动画': '少儿频道',
+    '嘉佳少儿': '少儿频道',
+    '卡酷少儿': '少儿频道',
+    '动漫秀场': '少儿频道',
+    '哈哈炫动': '少儿频道',
+    '金鹰卡通': '少儿频道',
+    '优漫卡通': '少儿频道',
+    '靖洋卡通': '少儿频道',
+    '广东少儿': '少儿频道',
+
+    # 影视频道
+    'CHC动作电影': '影视频道',
+    'CHC高清电影': '影视频道',
+    'CHC家庭影院': '影视频道',
+    'NewTV惊悚悬疑': '影视频道',
+    'NewTV动作电影': '影视频道',
+    '黑莓电影': '影视频道',
+    '纬来电影': '影视频道',
+    '靖天映画': '影视频道',
+    '靖天戏剧': '影视频道',
+    '星卫娱乐': '影视频道',
+    '艾尔达娱乐': '影视频道',
+}
+
+CATEGORY_ORDER = [
+    '广东频道',
+    '央视频道',
+    '卫视频道',
+    '港澳台',
+    '少儿频道',
+    '影视频道',
+    '其他'
+]
+
+def classify_channel_name(name):
+    return CHANNEL_CATEGORIES.get(name, '其他')
+
+def category_sort_key(name):
+    cat = classify_channel_name(name)
+    try:
+        cat_idx = CATEGORY_ORDER.index(cat)
+    except Exception:
+        cat_idx = 99
+    return (cat_idx, name)
+
 # 读取修改频道名称的方法
 def load_modify_name(filename):
     corrections = {}
@@ -108,32 +289,26 @@ def extract_channel_number(name):
         except ValueError:
             pass
 
-    # 处理"卫视"频道
-    if "卫视" in name:
-        return (300, name)
-
-    # 处理"教育"频道
-    if "教育" in name:
-        return (400, name)
-
-    # 处理"电影"频道
-    if "电影" in name:
-        return (500, name)
-
-    # 处理"体育"频道
-    if "体育" in name:
-        return (600, name)
-
-    # 处理"新闻"频道
-    if "新闻" in name:
-        return (700, name)
-
-    # 处理"综合"频道
-    if "综合" in name:
-        return (800, name)
-
     # 其他频道
     return (999, name)
+
+# 对频道列表做归类和排序
+def group_and_sort_channels(channels):
+    grouped = {cat: [] for cat in CATEGORY_ORDER}
+    for line in channels:
+        if "," not in line:
+            continue
+        channel_name = line.split(',')[0].strip()
+        category = classify_channel_name(channel_name)
+        grouped.setdefault(category, []).append(line)
+    # 对每个类别内部排序
+    for cat in grouped:
+        grouped[cat] = sorted(grouped[cat], key=lambda x: extract_channel_number(x.split(',')[0]))
+    # 按优先级输出
+    sorted_all = []
+    for cat in CATEGORY_ORDER:
+        sorted_all.extend(grouped.get(cat, []))
+    return sorted_all
 
 # 主函数
 def main():
@@ -163,8 +338,8 @@ def main():
     print("正在处理频道数据...")
     freetv_lines_renamed = rename_channel(rename_dic, freetv_lines)
 
-    # 按特定规则排序
-    sorted_lines = sorted(freetv_lines_renamed, key=lambda x: extract_channel_number(x.split(',')[0]))
+    # 按分类和排序规则排序
+    sorted_lines = group_and_sort_channels(freetv_lines_renamed)
 
     # 分批再次保存
     for line in sorted_lines:
@@ -180,10 +355,10 @@ def main():
             else:
                 freetv_other_lines.append(line.strip())
 
-    # 按特定规则排序各分类
-    freetv_cctv_lines = sorted(freetv_cctv_lines, key=lambda x: extract_channel_number(x.split(',')[0]))
-    freetv_ws_lines = sorted(freetv_ws_lines, key=lambda x: extract_channel_number(x.split(',')[0]))
-    freetv_other_lines = sorted(freetv_other_lines, key=lambda x: extract_channel_number(x.split(',')[0]))
+    # 各分类也按归类排序
+    freetv_cctv_lines = group_and_sort_channels(freetv_cctv_lines)
+    freetv_ws_lines = group_and_sort_channels(freetv_ws_lines)
+    freetv_other_lines = group_and_sort_channels(freetv_other_lines)
 
     # 构建输出内容
     output_lines = ["更新时间,#genre#"] + [version] + ['\n'] + ["freetv,#genre#"] + sorted_lines
