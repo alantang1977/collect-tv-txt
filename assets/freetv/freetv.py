@@ -94,12 +94,12 @@ def extract_channel_number(name):
                 num = int(num_part)
             except ValueError:
                 return (0, name)  # 无法转换为数字时返回0
-            
+
         # 处理数字后的字母部分，如CCTV5+
         if alpha_part:
             return (100 + num, name)  # 给带字母的CCTV频道更高权重
         return (num, name)
-    
+
     # 处理数字频道，如"北京卫视2"
     num_match = re.search(r'(\d+)$', name)
     if num_match:
@@ -107,64 +107,65 @@ def extract_channel_number(name):
             return (200 + int(num_match.group(1)), name)  # 普通数字频道权重200+
         except ValueError:
             pass
-    
+
     # 处理"卫视"频道
     if "卫视" in name:
         return (300, name)
-    
+
     # 处理"教育"频道
     if "教育" in name:
         return (400, name)
-    
+
     # 处理"电影"频道
     if "电影" in name:
         return (500, name)
-    
+
     # 处理"体育"频道
     if "体育" in name:
         return (600, name)
-    
+
     # 处理"新闻"频道
     if "新闻" in name:
         return (700, name)
-    
+
     # 处理"综合"频道
     if "综合" in name:
         return (800, name)
-    
+
     # 其他频道
     return (999, name)
 
 # 主函数
 def main():
     global freetv_dictionary, freetv_dictionary_cctv, freetv_dictionary_ws
-    
+    global freetv_cctv_lines, freetv_ws_lines, freetv_other_lines
+
     # 读取配置文件
     print("正在读取配置文件...")
     rename_dic = load_modify_name('assets/freetv/freetv_rename.txt')
     freetv_dictionary = read_txt_to_array('assets/freetv/freetvlist.txt')
     freetv_dictionary_cctv = read_txt_to_array('assets/freetv/freetvlist_cctv.txt')
     freetv_dictionary_ws = read_txt_to_array('assets/freetv/freetvlist_ws.txt')
-    
+
     # 处理URL
     urls = ["https://freetv.fun/test_channels_original_new.txt"]
     for url in urls:
         print(f"正在处理URL: {url}")
         process_url(url)
-    
+
     # 获取当前时间
     utc_time = datetime.now(timezone.utc)
     beijing_time = utc_time + timedelta(hours=8)
     formatted_time = beijing_time.strftime("%Y%m%d %H:%M:%S")
     version = formatted_time + ",url"
-    
+
     # 处理并保存全集文件
     print("正在处理频道数据...")
     freetv_lines_renamed = rename_channel(rename_dic, freetv_lines)
-    
+
     # 按特定规则排序
     sorted_lines = sorted(freetv_lines_renamed, key=lambda x: extract_channel_number(x.split(',')[0]))
-    
+
     # 分批再次保存
     for line in sorted_lines:
         if "#genre#" not in line and "," in line and "://" in line:
@@ -178,19 +179,19 @@ def main():
                 freetv_ws_lines.append(line.strip())
             else:
                 freetv_other_lines.append(line.strip())
-    
+
     # 按特定规则排序各分类
     freetv_cctv_lines = sorted(freetv_cctv_lines, key=lambda x: extract_channel_number(x.split(',')[0]))
     freetv_ws_lines = sorted(freetv_ws_lines, key=lambda x: extract_channel_number(x.split(',')[0]))
     freetv_other_lines = sorted(freetv_other_lines, key=lambda x: extract_channel_number(x.split(',')[0]))
-    
+
     # 构建输出内容
     output_lines = ["更新时间,#genre#"] + [version] + ['\n'] + ["freetv,#genre#"] + sorted_lines
-    
+
     output_lines_cctv = ["更新时间,#genre#"] + [version] + ['\n'] + ["freetv_cctv,#genre#"] + freetv_cctv_lines
     output_lines_ws = ["更新时间,#genre#"] + [version] + ['\n'] + ["freetv_ws,#genre#"] + freetv_ws_lines
     output_lines_other = ["更新时间,#genre#"] + [version] + ['\n'] + ["freetv_other,#genre#"] + freetv_other_lines
-    
+
     # 保存文件
     output_files = [
         ("assets/freetv/freetv_output.txt", output_lines),
@@ -198,7 +199,7 @@ def main():
         ("assets/freetv/freetv_output_ws.txt", output_lines_ws),
         ("assets/freetv/freetv_output_other.txt", output_lines_other)
     ]
-    
+
     for file_path, lines in output_files:
         try:
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -208,8 +209,8 @@ def main():
             print(f"已成功保存文件: {file_path}")
         except Exception as e:
             print(f"保存文件 {file_path} 时发生错误：{e}")
-    
+
     print("所有操作已完成!")
 
 if __name__ == "__main__":
-    main()    
+    main()
